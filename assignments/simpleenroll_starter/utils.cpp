@@ -15,16 +15,16 @@
 #include <sstream>
 #include <tuple>
 #include <vector>
-
+#include <algorithm>
 // STUDENT TODO: add paths
-std::string COURSES_OFFERED_CSV_PATH = "<ENTER PATH HERE>";
+std::string COURSES_OFFERED_CSV_PATH = "student_output/courses_offered.csv";
 
-std::string COURSES_NOT_OFFERED_CSV_PATH = "<ENTER PATH HERE>";
+std::string COURSES_NOT_OFFERED_CSV_PATH = "student_output/courses_not_offered.csv";
 
 struct Course {
-  /* STUDENT TODO: ADD TYPE */ title;
-  /* STUDENT TODO: ADD TYPE */ number_of_units;
-  /* STUDENT TODO: ADD TYPE */ quarter;
+  std::string title;
+  std::string number_of_units;
+  std::string quarter;
 
   // ignore this!
   bool operator==(const Course &other) const {
@@ -46,8 +46,26 @@ std::vector<std::string> split(std::string s, char delim);
  * 1) Take a look at the split function we provide
  * 2) Each LINE is a record! *this is important, so we're saying it again :>)*
  */
-void parse_csv(std::string filename, std::vector<Course> vector_of_courses) {
+// int getInteger(std::string numString){
+//   std::istringstream iss(numString);
+//   int numInt = 0;
+//   iss >> numInt;
+//   return numInt;
+// }
+
+void parse_csv(std::string filename, std::vector<Course>& vector_of_courses) {
   // STUDENT TODO: Implement this function
+  std::ifstream inputFile(filename);  //文件输入流
+  if(inputFile.is_open()){
+    std::string line;
+    getline(inputFile, line);
+    while(getline(inputFile, line)){
+      std::vector<std::string> return_vec = split(line, ',');
+      Course course{return_vec[0], return_vec[1], return_vec[2]};
+      vector_of_courses.push_back(course); 
+    }
+
+  }
 }
 
 /*
@@ -64,6 +82,24 @@ void parse_csv(std::string filename, std::vector<Course> vector_of_courses) {
  */
 void write_courses_offered(std::vector<Course> vector_of_courses) {
   // STUDENT TODO: implement this function
+  
+  // 1) Write
+  std::ofstream outputFile(COURSES_OFFERED_CSV_PATH);
+  if(outputFile.is_open()){
+    // std::string line0 = "Title,Number of Units,Quarter";    // python生成的binary2csv文件没有header
+    // outputFile << line0 << std::endl;
+    for(auto course:vector_of_courses){
+      if(course.quarter != "null")  outputFile << course.title << "," << course.number_of_units << "," << course.quarter << std::endl;
+    }
+  }
+
+  // 2) Delete
+  for(auto course: vector_of_courses){
+    if(course.quarter != "null"){
+      delete_elem_from_vector(vector_of_courses, course);
+    }
+  }
+
 }
 
 /*
@@ -79,6 +115,14 @@ void write_courses_offered(std::vector<Course> vector_of_courses) {
  */
 void write_courses_not_offered(std::vector<Course> vector_of_courses) {
   // STUDENT TODO: implement this function
+  std::ofstream outputFile(COURSES_NOT_OFFERED_CSV_PATH);
+  if(outputFile.is_open()){
+    // std::string line0 = "Title,Number of Units,Quarter";
+    // outputFile << line0 << std::endl;
+    for(auto course:vector_of_courses){
+      if(course.quarter == "null")  outputFile << course.title << "," << course.number_of_units << "," << course.quarter << std::endl;
+    }
+  }
 }
 
 /* ######## HEYA! DON'T MODIFY ANYTHING BEYOND THIS POINT THX ######## */
@@ -101,7 +145,7 @@ std::vector<std::string> split(std::string s, char delim) {
   std::vector<std::string> return_vec;
   std::stringstream ss(s);
   std::string token;
-  while (getline(ss, token, ',')) {
+  while (getline(ss, token, delim)) {
     return_vec.push_back(token);
   }
   return return_vec;

@@ -9,7 +9,7 @@
 #include <system_error>
 #include <vector>
 
-std::string COURSES_PATH = "<ENTER PATH HERE>";
+std::string COURSES_PATH = "courses.csv";
 
 bool structTest() {
   Course c{"Standard C++ Programming", "1", "2023-2024 Winter"};
@@ -26,6 +26,8 @@ int main() {
   }
 
   parse_csv(COURSES_PATH, vector_of_courses);
+  print_vector(vector_of_courses);
+
 
   write_courses_offered(vector_of_courses);
 
