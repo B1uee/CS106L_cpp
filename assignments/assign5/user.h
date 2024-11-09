@@ -18,11 +18,21 @@ public:
   /** 
    * STUDENT TODO:
    * Your custom operators and special member functions will go here!
-   */
+  */
+  ~User();
+  User(const User& user);
+  User& operator=(const User& user);
+  User(User&&) = delete;
+  User& operator=(User&&) = delete;
+
+  User& operator+=(User& other);
+  bool operator<(const User& other) const;
 
 private:
   std::string _name;
   std::string* _friends;
   size_t _size;
   size_t _capacity;
+
+  friend std::ostream& operator<<(std::ostream& os, const User& user);
 };
