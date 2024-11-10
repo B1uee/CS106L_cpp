@@ -25,7 +25,7 @@ public:
     using iter = T*;
 
     myContainer();
-    myContainer(size_t size, size_t capacity, T* data): size(size), capacity(capacity), data(data) {};
+    myContainer(size_t size, size_t capacity, T* data): size(size), capacity(capacity), data(data) {}
     ~myContainer();
 
     void push_back(const T& element);
