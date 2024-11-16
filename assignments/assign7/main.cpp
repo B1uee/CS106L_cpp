@@ -50,9 +50,20 @@ template <typename T> struct ListNode {
  * @param values The values to store in the list.
  * @return A `unique_ptr` to the head of the list.
  */
-template <typename T> unique_ptr<ListNode<T>> create_list(const std::vector<T>& values) {
+template <typename T> unique_ptr<ListNode<T>> create_list(const std::vector<T>& values) {   
+  //一般返回的是type*，但unique_ptr本身就可以看作指针
   /* STUDENT TODO: Implement this method */
-  throw std::runtime_error("Not implemented: createList");
+  unique_ptr<ListNode<T>> head(nullptr);
+
+  for(auto it = values.rbegin(); it != values.rend(); ++it){   //头插法反向便利
+    ListNode<T>* raw_node = new ListNode<T>(*it);
+    unique_ptr<ListNode<T>> node(raw_node);
+    node->next = std::move(head);
+    head = std::move(node);
+  }
+
+  return head;
+
 }
 
 /**
