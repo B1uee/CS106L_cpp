@@ -55,7 +55,7 @@ template <typename T> unique_ptr<ListNode<T>> create_list(const std::vector<T>& 
   /* STUDENT TODO: Implement this method */
   unique_ptr<ListNode<T>> head(nullptr);
 
-  for(auto it = values.rbegin(); it != values.rend(); ++it){   //头插法反向便利
+  for(auto it = values.rbegin(); it != values.rend(); ++it){   //头插法反向遍历
     ListNode<T>* raw_node = new ListNode<T>(*it);
     unique_ptr<ListNode<T>> node(raw_node);
     node->next = std::move(head);
